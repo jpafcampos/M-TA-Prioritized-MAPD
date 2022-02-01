@@ -8,6 +8,7 @@ from ta_world import *
 from ta_task import *
 from ta_astar import AStar
 from queue import Queue
+from tpg import *
 from itertools import combinations
 import mesa_server
 
@@ -18,6 +19,8 @@ def load_files():
     world = World("instances//small//kiva-10-500-5.map", GLOBAL_MAX_AGENT_TIME)
     tasks = TaskDict("instances//small//kiva-1.task", world)
     agent_tour_dict = TourDict("tour//10-1.tour", len(world.agents), tasks)
+    print ("Number of Agents:")
+    print(len(world.agents))
     return world, tasks, agent_tour_dict
 
 
@@ -172,7 +175,7 @@ def main():
         print("Make_span of :" + str(make_span))
         print("Runtime of :" + str(round(((time_stop - time_start) / 60), 1)) + " minutes")
         # Simulate results
-        mesa_server.simulate_scenario(world, tsp_seqs, last_sim_step)
+        #mesa_server.simulate_scenario(world, tsp_seqs, last_sim_step)
 
 
 if __name__ == '__main__':

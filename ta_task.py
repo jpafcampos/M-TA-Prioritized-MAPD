@@ -37,6 +37,7 @@ class TaskDict(dict):
                 else:
                     data = line.split("\t")
                 release_time = int(data[0])
+                print(release_time)
                 endpoint_pickup = int(data[1])
                 endpoint_delivery = int(data[2])
                 self[task_id] = Task(task_id, release_time, endpoint_pickup, endpoint_delivery, world)
