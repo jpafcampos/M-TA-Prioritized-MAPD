@@ -71,18 +71,18 @@ class TPG:
                     pass
                 else:
                     if agent.path[t] != agent.path[t-1]:
-                        self.tpg.add_edge(v, loc)
+                        self.tpg.add_edge(v, loc, 1)
                         v = loc
     
     def createType2Edges (self):
         for id, agent in self.agents.items():
             for t, loc in agent.path.items():
                 if loc in self.tpg.get_vertices():
-                    for agent_ in self.agents:
+                    for id, agent_ in self.agents.items():
                         if agent != agent_:
                             for tk in range(t+1, len(agent.path.items())):
                                 if agent_.path[tk] in self.tpg.get_vertices() and agent_.path[tk] == agent.path[t]:
-                                    self.tpg.add_edge(agent_.path[tk], agent.path[t])
+                                    self.tpg.add_edge(agent_.path[tk], agent.path[t], 1)
                 
 
 #testing the graph data structure
@@ -92,9 +92,13 @@ g.add_vertex((30,1))
 g.add_vertex((30,2))
 
 g.add_edge((30,1), (30,2), 4)
+g.add_edge((30,1), (30,2), 2) #para trocar o peso, criar novamente a aresta com novo peso
 
 for v in g:
-    print(v)
+    for w in v.get_connections():
+        vid = v.get_id()
+        wid = w.get_id()
+        print ( vid, wid, v.get_weight(w))
 
 
 print((30,1) in g.get_vertices()) #print True

@@ -177,7 +177,6 @@ def main():
         #Simulate results
         #mesa_server.simulate_scenario(world, tsp_seqs, last_sim_step)
         tpg = TPG(world)
-        print(world.agents)
         tpg.createType1Edges()
         tpg.createType2Edges()
 
