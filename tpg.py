@@ -67,40 +67,38 @@ class TPG:
         for id, agent in self.agents.items(): #starts at 1
             v = agent.path[0]
             for t, loc in agent.path.items():
-                if t == 0:
-                    pass
-                else:
+                if t != 0:
                     if agent.path[t] != agent.path[t-1]:
-                        self.tpg.add_edge(v, loc, 1)
+                        self.tpg.add_edge((v, id, t-1), (loc,id, t), 1)
                         v = loc
     
     def createType2Edges (self):
         for id, agent in self.agents.items():
             for t, loc in agent.path.items():
-                if loc in self.tpg.get_vertices():
-                    for id, agent_ in self.agents.items():
-                        if agent != agent_:
+                if (loc, id, t) in self.tpg.get_vertices():
+                    for id_, agent_ in self.agents.items():
+                        if id != id_:
                             for tk in range(t+1, len(agent.path.items())):
-                                if agent_.path[tk] in self.tpg.get_vertices() and agent_.path[tk] == agent.path[t]:
-                                    self.tpg.add_edge(agent_.path[tk], agent.path[t], 1)
+                                if (agent_.path[tk], id_, tk) in self.tpg.get_vertices() and agent_.path[tk] == agent.path[t]:
+                                    self.tpg.add_edge((agent_.path[tk], id_, tk), (agent.path[t], id, t), 1)
                 
 
 #testing the graph data structure
 connections = [('A', 'B'), ('B', 'C'), ('C', 'D'), ('E', 'F'), ('F', 'C')]
 g = Graph()
-g.add_vertex((30,1))
-g.add_vertex((30,2))
+g.add_vertex((30,1, 1, 0)) #pos_x, pos_y, agent_id, inst_tempo_path
+g.add_vertex((30,2, 1, 0))
 
-g.add_edge((30,1), (30,2), 4)
-g.add_edge((30,1), (30,2), 2) #para trocar o peso, criar novamente a aresta com novo peso
+g.add_edge((30,1,1, 0), (30,2,1, 0), 4)
+g.add_edge((30,1,2, 0), (30,2,2,0), 2) #para trocar o peso, criar novamente a aresta com novo peso
 
 for v in g:
     for w in v.get_connections():
         vid = v.get_id()
         wid = w.get_id()
-        print ( vid, wid, v.get_weight(w))
+        print ( str(vid), str(wid), v.get_weight(w))
 
 
-print((30,1) in g.get_vertices()) #print True
+print((30,1,1,0) in g.get_vertices()) #print True
 
 

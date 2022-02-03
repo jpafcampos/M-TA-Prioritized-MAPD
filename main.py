@@ -180,5 +180,18 @@ def main():
         tpg.createType1Edges()
         tpg.createType2Edges()
 
+    
+    for v in tpg.tpg:
+        for w in v.get_connections():
+            vid = v.get_id()[0]
+            agentV = v.get_id()[1]
+            inst_tempo_pathV = v.get_id()[2]
+            wid = w.get_id()[0]
+            agentW = w.get_id()[1]
+            inst_tempo_pathW = w.get_id()[2]
+            print ( vid, agentV, inst_tempo_pathV, wid, agentW, inst_tempo_pathW, v.get_weight(w))
+
+    print("fim")
+
 if __name__ == '__main__':
     main()
