@@ -9,6 +9,7 @@ from ta_task import *
 from ta_astar import AStar
 from queue import Queue
 from itertools import combinations
+from teste import alocacao
 import mesa_server
 
 GLOBAL_MAX_AGENT_TIME = 1500
@@ -58,22 +59,24 @@ def find_agent_path(world, agent, time_step, release_time=0, find_step=0):
 
 def test_paths(world):
     for agent_1, agent_2 in combinations(world.agents, 2):
-        for time_step in world.agents[agent_1].path:
-            if time_step > max(world.agents[agent_2].path):
+        for time_step in range(len(world.agents[agent_1].path)):
+            if time_step > len(world.agents[agent_2].path):
                 break
             # Vertex collision between any two agents
             if world.agents[agent_1].path[time_step] == world.agents[agent_2].path[time_step]:
                 print("Agent #" + str(agent_1) + ",#" + str(agent_2) + " vertex collision at " +
                       str(world.agents[agent_1].path[time_step]) + " t:" + str(time_step))
                 return False
-            # Edge collision between any two agents
-            elif (time_step + 1 in world.agents[agent_1].path) and (time_step + 1 in world.agents[agent_2].path):
-                if (world.agents[agent_1].path[time_step] == world.agents[agent_2].path[time_step + 1]) and \
-                        (world.agents[agent_2].path[time_step] == world.agents[agent_1].path[time_step + 1]):
-                    print("Agent #" + str(agent_1) + ",#" + str(agent_2) + " edge collision at " +
-                          str(world.agents[agent_1].path[time_step]) + "-" +
-                          str(world.agents[agent_2].path[time_step]) + " t:" + str(time_step))
-                    return False
+                # print("Errado")
+            # # Edge collision between any two agents
+            # elif (time_step + 1 < len(world.agents[agent_1].path)) and (time_step + 1 < len(world.agents[agent_2].path)):
+            #     if (world.agents[agent_1].path[time_step] == world.agents[agent_2].path[time_step + 1]) and \
+            #             (world.agents[agent_2].path[time_step] == world.agents[agent_1].path[time_step + 1]):
+            #         print("Agent #" + str(agent_1) + ",#" + str(agent_2) + " edge collision at " +
+            #               str(world.agents[agent_1].path[time_step]) + "-" +
+            #               str(world.agents[agent_2].path[time_step]) + " t:" + str(time_step))
+            #         return False
+                    # print("Errado")
     return True
 
 
@@ -172,8 +175,25 @@ def main():
         print("Make_span of :" + str(make_span))
         print("Runtime of :" + str(round(((time_stop - time_start) / 60), 1)) + " minutes")
         # Simulate results
-        mesa_server.simulate_scenario(world, tsp_seqs, last_sim_step)
+        #mesa_server.simulate_scenario(world, tsp_seqs, last_sim_step)
+    
+    # arquivo = open('caminhos.txt','w')
+    # arquivo.write('end\n')
+    # for agent_id,agent in world.agents.items():
+    #     # arquivo = open('agente'+str(agent_id)+'.txt','w') 
+    #     arquivo.write(str(agent_id)+'\n')
+    #     for registro,loc in agent.path.items():
+    #         arquivo.write(str(loc)+"\n")
+    #     arquivo.write('end\n')
+    # print("Arquivo Escrito")
 
+    caminhos = alocacao('caminhos.txt')
+    for agent_id,agent in world.agents.items():
+        agent.path = caminhos[agent_id-1][1]
+    print("Teste novo caminho")
+    # arquivo.close()        
+    print(test_paths(world))
 
 if __name__ == '__main__':
     main()
+
