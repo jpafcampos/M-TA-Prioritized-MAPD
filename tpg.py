@@ -2,62 +2,57 @@ import pprint
 from collections import defaultdict
 
 
-class Graph(object):
-    """ Graph data structure, directed by default. """
-
-    def __init__(self, connections, directed=True):
-        self._graph = defaultdict(set)
-        self._directed = directed
-        self.add_connections(connections)
-
-    def add_connections(self, connections):
-        """ Add connections (list of tuple pairs) to graph """
-
-        for node1, node2 in connections:
-            self.add(node1, node2)
-
-    def add(self, node1, node2):
-        """ Add connection between node1 and node2 """
-
-        self._graph[node1].add(node2)
-        if not self._directed:
-            self._graph[node2].add(node1)
-
-    def remove(self, node):
-        """ Remove all references to node """
-
-        for n, cxns in self._graph.items():  # python3: items(); python2: iteritems()
-            try:
-                cxns.remove(node)
-            except KeyError:
-                pass
-        try:
-            del self._graph[node]
-        except KeyError:
-            pass
-
-    def is_connected(self, node1, node2):
-        """ Is node1 directly connected to node2 """
-
-        return node1 in self._graph and node2 in self._graph[node1]
-
-    def find_path(self, node1, node2, path=[]):
-        """ Find any path between node1 and node2 (may not be shortest) """
-
-        path = path + [node1]
-        if node1 == node2:
-            return path
-        if node1 not in self._graph:
-            return None
-        for node in self._graph[node1]:
-            if node not in path:
-                new_path = self.find_path(node, node2, path)
-                if new_path:
-                    return new_path
-        return None
+class Vertex:
+    def __init__(self, node):
+        self.id = node
+        self.adjacent = {}
 
     def __str__(self):
-        return '{}({})'.format(self.__class__.__name__, dict(self._graph))
+        return str(self.id) + ' adjacent: ' + str([x.id for x in self.adjacent])
+
+    def add_neighbor(self, neighbor, weight=0):
+        self.adjacent[neighbor] = weight
+
+    def get_connections(self):
+        return self.adjacent.keys()  
+
+    def get_id(self):
+        return self.id
+
+    def get_weight(self, neighbor):
+        return self.adjacent[neighbor]
+
+class Graph:
+    def __init__(self):
+        self.vert_dict = {}
+        self.num_vertices = 0
+
+    def __iter__(self):
+        return iter(self.vert_dict.values())
+
+    def add_vertex(self, node):
+        self.num_vertices = self.num_vertices + 1
+        new_vertex = Vertex(node)
+        self.vert_dict[node] = new_vertex
+        return new_vertex
+
+    def get_vertex(self, n):
+        if n in self.vert_dict:
+            return self.vert_dict[n]
+        else:
+            return None
+
+    def add_edge(self, frm, to, cost = 0):
+        if frm not in self.vert_dict:
+            self.add_vertex(frm)
+        if to not in self.vert_dict:
+            self.add_vertex(to)
+
+        self.vert_dict[frm].add_neighbor(self.vert_dict[to], cost)
+
+
+    def get_vertices(self):
+        return self.vert_dict.keys()
 
 class TPG:
     def __init__(self, world):
@@ -93,9 +88,16 @@ class TPG:
 
 #testing the graph data structure
 connections = [('A', 'B'), ('B', 'C'), ('C', 'D'), ('E', 'F'), ('F', 'C')]
-g = Graph(connections, directed=True)
-g1 = Graph(connections, directed=True)
-print(g==g)
-            
+g = Graph()
+g.add_vertex((30,1))
+g.add_vertex((30,2))
+g.add_edge((30,1), (30,2), 4)
+
+for v in g:
+    for w in v.get_connections():
+        vid = v.get_id()
+        wid = w.get_id()
+        print ( vid, wid, v.get_weight(w))
+
 
 

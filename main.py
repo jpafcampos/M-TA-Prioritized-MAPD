@@ -174,8 +174,8 @@ def main():
         print("Success, no collisions found")
         print("Make_span of :" + str(make_span))
         print("Runtime of :" + str(round(((time_stop - time_start) / 60), 1)) + " minutes")
-        # Simulate results
-        #mesa_server.simulate_scenario(world, tsp_seqs, last_sim_step)
+        #Simulate results
+        mesa_server.simulate_scenario(world, tsp_seqs, last_sim_step)
 
 
 if __name__ == '__main__':
