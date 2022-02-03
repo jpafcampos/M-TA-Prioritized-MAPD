@@ -50,7 +50,6 @@ class Graph:
 
         self.vert_dict[frm].add_neighbor(self.vert_dict[to], cost)
 
-
     def get_vertices(self):
         return self.vert_dict.keys()
 
@@ -65,25 +64,25 @@ class TPG:
         self.tpg = Graph()
     
     def createType1Edges (self):
-        for agent in self.agents: #starts at 1
+        for id, agent in self.agents.items(): #starts at 1
             v = agent.path[0]
             for t, loc in agent.path.items():
                 if t == 0:
                     pass
                 else:
                     if agent.path[t] != agent.path[t-1]:
-                        self.tpg.add(v, loc)
+                        self.tpg.add_edge(v, loc)
                         v = loc
     
     def createType2Edges (self):
-        for agent in self.agents:
+        for id, agent in self.agents.items():
             for t, loc in agent.path.items():
-                if loc in self.tpg._graph:
+                if loc in self.tpg.get_vertices():
                     for agent_ in self.agents:
                         if agent != agent_:
                             for tk in range(t+1, len(agent.path.items())):
-                                if agent_.path[tk] in self.tpg._graph and agent_.path[tk] == agent.path[t]:
-                                    self.tpg.add(agent_.path[tk], agent.path[t])
+                                if agent_.path[tk] in self.tpg.get_vertices() and agent_.path[tk] == agent.path[t]:
+                                    self.tpg.add_edge(agent_.path[tk], agent.path[t])
                 
 
 #testing the graph data structure
@@ -91,13 +90,13 @@ connections = [('A', 'B'), ('B', 'C'), ('C', 'D'), ('E', 'F'), ('F', 'C')]
 g = Graph()
 g.add_vertex((30,1))
 g.add_vertex((30,2))
+
 g.add_edge((30,1), (30,2), 4)
 
 for v in g:
-    for w in v.get_connections():
-        vid = v.get_id()
-        wid = w.get_id()
-        print ( vid, wid, v.get_weight(w))
+    print(v)
 
+
+print((30,1) in g.get_vertices()) #print True
 
 

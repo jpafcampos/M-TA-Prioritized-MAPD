@@ -175,8 +175,11 @@ def main():
         print("Make_span of :" + str(make_span))
         print("Runtime of :" + str(round(((time_stop - time_start) / 60), 1)) + " minutes")
         #Simulate results
-        mesa_server.simulate_scenario(world, tsp_seqs, last_sim_step)
-
+        #mesa_server.simulate_scenario(world, tsp_seqs, last_sim_step)
+        tpg = TPG(world)
+        print(world.agents)
+        tpg.createType1Edges()
+        tpg.createType2Edges()
 
 if __name__ == '__main__':
     main()
